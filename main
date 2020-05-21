@@ -1,0 +1,71 @@
+import random
+
+
+def show_rules():
+    rules = "***HELLO AND WELCOME TO THE GUESSING GAME***\n" \
+            "***RULES***\n" \
+            "The rules are simple. Guess the number I'm thinking of. I'll tell you if you're right or if you need to " \
+            "guess higher or lower. The less tries you take, the better your score (Hint: The its between 1-100).\n" \
+            "Type 'menu' to see your options at any point in the game.\n"
+    print(rules)
+
+
+def show_menu():
+    menus = "***MENU***\n" \
+            "Type 'rules' at any point to see the rules one more time. \n" \
+            "Type 'score' at any point to see the high score.\n " \
+            "Type 'quit' at any point to leave your current game. (Note this will reset the high score.)\n"
+    print(menus)
+
+
+def start_game(high_score):
+    target = random.randint(0, 100)
+    score = 1
+    guess = input(f"Ok, I've thought of a number. Let's see if you can beat the current high score: {high_score} "
+                  f"(100 by default) \n"
+                  "What is your guess?   ")
+
+    while guess != target:
+        try:
+            if guess.lower() == "quit":
+                print("Thanks for playing! Hope to see you again soon!")
+                exit()
+            elif guess.lower() == "rules":
+                show_rules()
+            elif guess.lower() == "menu":
+                show_menu()
+            elif guess.lower() == "score":
+                print(f"The current high score is: {high_score} (100 by default). Think you can beat it?")
+            if int(guess) not in range(0, 100):
+                print("Wow, you're way off. The number is actually between 0 and 100.")
+                score += 1
+            elif int(guess) > target:
+                print(f"Your guess {guess} was too high.")
+                score += 1
+            elif int(guess) < target:
+                print(f"Your guess {guess} was too low.")
+                score += 1
+            elif int(guess) == target:
+                score += 1
+                print(f"Congratulations, You got it! It only took you {score} tries!")
+                if score < high_score:
+                    print("Wow, that's actually the new high score! You're good! I wonder if you can beat it.")
+                replay_request = input("Can you beat that? Want to play again? (Y/N - Note: Not playing again will "
+                                       "reset the high score.)   ")
+                while replay_request != "y" or "n":
+                    if replay_request.lower() == "y":
+                        start_game(score)
+                    elif replay_request.lower() == "n":
+                        print("Thanks for playing! Hope to see you again soon!(High score has been reset to default.)")
+                        exit()
+                    else:
+                        replay_request = input("Not sure I understand. Please enter 'y' or 'n'.   ")
+            guess = input("Try again:   ")
+        except ValueError:
+            print("Looks like you didn't enter a valid guess last time (Hint: It's a number between 0-100).")
+            guess = input("So what was your guess?   ")
+
+
+show_rules()
+show_menu()
+start_game(100)
